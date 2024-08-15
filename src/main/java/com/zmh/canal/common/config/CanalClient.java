@@ -2,8 +2,8 @@ package com.zmh.canal.common.config;
 
 import com.alibaba.otter.canal.client.CanalConnector;
 import com.alibaba.otter.canal.client.CanalConnectors;
-import com.zmh.canal.common.handler.CanalEntryHandler;
 import com.zmh.canal.common.handler.CanalMessageHandler;
+import com.zmh.canal.common.handler.IEsHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,7 +55,7 @@ public class CanalClient implements DisposableBean {
      * canal消息处理
      */
     @Bean
-    public CanalMessageHandler getMessageHandler(List<CanalEntryHandler> entryHandlerList) {
+    public CanalMessageHandler getMessageHandler(List<IEsHandler> entryHandlerList) {
         return new CanalMessageHandler(entryHandlerList);
     }
 

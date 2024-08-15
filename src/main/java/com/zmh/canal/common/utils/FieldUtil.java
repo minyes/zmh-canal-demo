@@ -5,7 +5,7 @@ import cn.hutool.core.util.ReflectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.zmh.canal.common.annotation.CanalTable;
-import com.zmh.canal.common.handler.CanalEntryHandler;
+import com.zmh.canal.common.handler.IEsHandler;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
@@ -22,12 +22,12 @@ public class FieldUtil {
     /**
      * 缓存，key：CanalEntryHandler的实现类  value：CanalEntryHandler接口的泛型
      */
-    private static Map<Class<? extends CanalEntryHandler>, Class> cache = new ConcurrentHashMap<>();
+    private static Map<Class<? extends IEsHandler>, Class> cache = new ConcurrentHashMap<>();
 
     /**
      * 获取table名称
      */
-    public static String getTableGenericProperties(CanalEntryHandler entryHandler) {
+    public static String getTableGenericProperties(IEsHandler entryHandler) {
         Class<?> tableClass = getTableClass(entryHandler);
         if (tableClass != null) {
             //CanalTable优先，没有才以TableName
@@ -47,8 +47,8 @@ public class FieldUtil {
     /**
      * 获取class类型
      */
-    public static <T> Class<T> getTableClass(CanalEntryHandler object) {
-        Class<? extends CanalEntryHandler> handlerClass = object.getClass();
+    public static <T> Class<T> getTableClass(IEsHandler object) {
+        Class<? extends IEsHandler> handlerClass = object.getClass();
         Class tableClass = cache.get(handlerClass);
         if (tableClass == null) {
             //获取所有实现接口
@@ -56,7 +56,7 @@ public class FieldUtil {
             for (Type t : interfaces) {
                 //获取原始类型
                 Class c = (Class) ((ParameterizedType) t).getRawType();
-                if (c.equals(CanalEntryHandler.class)) {
+                if (c.equals(IEsHandler.class)) {
                     tableClass = (Class<T>) ((ParameterizedType) t).getActualTypeArguments()[0];
                     cache.putIfAbsent(handlerClass, tableClass);
                     return tableClass;

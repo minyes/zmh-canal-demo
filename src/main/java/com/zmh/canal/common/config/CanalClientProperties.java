@@ -19,7 +19,7 @@ public class CanalClientProperties {
     /**
      * 端口
      */
-    private Integer port = 3306;
+    private Integer port = 11111;
 
     /**
      * 描述
@@ -29,12 +29,12 @@ public class CanalClientProperties {
     /**
      * 账号
      */
-    private String username = "root";
+    private String username = "canal";
 
     /**
      * 密码
      */
-    private String password = "123456";
+    private String password = "canal";
 
     /**
      * 获取指定数量的数据

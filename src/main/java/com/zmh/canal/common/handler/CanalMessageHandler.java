@@ -20,14 +20,14 @@ public class CanalMessageHandler {
     /**
      * key:table名称，value：EntryHandler实现类
      */
-    private Map<String, CanalEntryHandler> tableHandlerMap;
+    private Map<String, IEsHandler> tableHandlerMap;
 
-    public CanalMessageHandler(List<? extends CanalEntryHandler> entryHandlers) {
+    public CanalMessageHandler(List<? extends IEsHandler> entryHandlers) {
         this.tableHandlerMap = this.getTableHandler(entryHandlers);
     }
 
 
-    public CanalEntryHandler getHandlerMap(String tableName) {
+    public IEsHandler getHandlerMap(String tableName) {
         return tableHandlerMap.get(tableName);
     }
 
@@ -35,18 +35,18 @@ public class CanalMessageHandler {
     /**
      * 获取所有EntryHandler信息
      *
-     * @param entryHandlers 所有EntryHandler
-     * @return map类型，key：CanalTable注解的value名称   value：对应的EntryHandler
+     * @param esHandlers 所有EsHandler
+     * @return map类型，key：CanalTable注解的value名称   value：对应的EsHandler
      */
-    private Map<String, CanalEntryHandler> getTableHandler(List<? extends CanalEntryHandler> entryHandlers) {
-        if (CollUtil.isEmpty(entryHandlers)) {
+    private Map<String, IEsHandler> getTableHandler(List<? extends IEsHandler> esHandlers) {
+        if (CollUtil.isEmpty(esHandlers)) {
             return CollUtil.newHashMap();
         }
-        Map<String, CanalEntryHandler> tableHandlerMap = new HashMap<>(entryHandlers.size());
-        for (CanalEntryHandler entryHandler : entryHandlers) {
-            String tableName = FieldUtil.getTableGenericProperties(entryHandler);
+        Map<String, IEsHandler> tableHandlerMap = new HashMap<>(esHandlers.size());
+        for (IEsHandler esHandler : esHandlers) {
+            String tableName = FieldUtil.getTableGenericProperties(esHandler);
             if (StrUtil.isNotBlank(tableName)) {
-                tableHandlerMap.putIfAbsent(tableName, entryHandler);
+                tableHandlerMap.putIfAbsent(tableName, esHandler);
             }
         }
         return tableHandlerMap;

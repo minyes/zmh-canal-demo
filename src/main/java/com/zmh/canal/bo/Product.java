@@ -1,5 +1,6 @@
-package com.zmh.canal.service.bo;
+package com.zmh.canal.bo;
 
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
@@ -15,13 +16,14 @@ import java.math.BigDecimal;
  */
 @Data
 @Document(indexName = "product",shards = 3,replicas = 1)//自动创建索引
+@TableName("product")//CanalTable不存在，才这个
 public class Product {
 
     /**
      * 全局唯一id
      */
     @Id
-    private int id;
+    private Long id;
 
     /**
      * 产品名称
