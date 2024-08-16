@@ -51,6 +51,7 @@ public class CanalScheduling {
                         }
                     });
                 }
+                // 返回确认收到
                 canalConnector.ack(batchId);
             } catch (Exception e) {
                 log.error("发送监听事件失败！不会滚！message={},错误原因={}", JSON.toJSONString(message), e.getMessage(), e);
@@ -76,11 +77,13 @@ public class CanalScheduling {
 
         CanalEntry.RowChange change;
         try {
+            // 获取数据
             change = CanalEntry.RowChange.parseFrom(entry.getStoreValue());
         } catch (InvalidProtocolBufferException e) {
             log.error("canalEntry_parser_error,根据CanalEntry获取RowChange失败！", e);
             return;
         }
+        // 获取binlog类型  插入 更新 删除
         CanalEntry.EventType eventType = entry.getHeader().getEventType();
 
         //table对应的es处理服务实现类
@@ -89,7 +92,9 @@ public class CanalScheduling {
 
         List<CanalEntry.RowData> rowDatasList = change.getRowDatasList();
         for (CanalEntry.RowData rowData : rowDatasList) {
+            //变更后数据
             Object afterObj = getAfterObj(table, rowData);
+            //变更前数据
             Object beforeObj = getBeforeObj(table, rowData);
             try {
                 switch (eventType) {
